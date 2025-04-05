@@ -13,60 +13,73 @@
 <body>
     <div class="container">
         <header class="profile">
-            <img src="images/avatar.png" alt="Keita's avatar" class="avatar" width="150" height="150">
+            <img src="images/avatar.png" alt="Keita's avatar" class="avatar" width="150" height="150" loading="lazy">
             <h1>Keita</h1>
-            <p class="subtitle">Some description...</p>
+            <p class="subtitle">Digital Creator & Streamer</p>
         </header>
         
         <nav class="links" aria-label="Social links">
-            <!-- Twitch Link -->
+            <!-- Social Links -->
             <a href="https://twitch.tv/yourchannel" class="link-card" target="_blank" rel="noopener noreferrer">
                 <div class="link-icon" aria-hidden="true">
                     <i class="fab fa-twitch"></i>
                 </div>
                 <div class="link-text">
                     <div class="link-title">Twitch</div>
-                    <div class="link-desc">Watch me stream live!</div>
+                    <div class="link-desc">Live streams every weekend</div>
                 </div>
             </a>
             
-            <!-- YouTube Link -->
             <a href="https://youtube.com/yourchannel" class="link-card" target="_blank" rel="noopener noreferrer">
                 <div class="link-icon" aria-hidden="true">
                     <i class="fab fa-youtube"></i>
                 </div>
                 <div class="link-text">
                     <div class="link-title">YouTube</div>
-                    <div class="link-desc">Check out my videos and clips</div>
+                    <div class="link-desc">Highlights and tutorials</div>
                 </div>
             </a>
             
-            <!-- Twitter Link -->
             <a href="https://twitter.com/yourhandle" class="link-card" target="_blank" rel="noopener noreferrer">
                 <div class="link-icon" aria-hidden="true">
                     <i class="fab fa-twitter"></i>
                 </div>
                 <div class="link-text">
                     <div class="link-title">Twitter</div>
-                    <div class="link-desc">Follow for updates and memes</div>
+                    <div class="link-desc">Daily updates and thoughts</div>
                 </div>
             </a>
             
-            <!-- Discord Link -->
-            <a href="https://discord.gg/yourinvite" class="link-card" target="_blank" rel="noopener noreferrer">
-                <div class="link-icon" aria-hidden="true">
-                    <i class="fab fa-discord"></i>
+            <!-- Discord Section -->
+            <div class="discord-split">
+                <a href="https://discord.gg/yourinvite" class="link-card" target="_blank" rel="noopener noreferrer">
+                    <div class="link-icon" aria-hidden="true">
+                        <i class="fab fa-discord"></i>
+                    </div>
+                    <div class="link-text">
+                        <div class="link-title">Discord Server</div>
+                        <div class="link-desc">Join our community</div>
+                    </div>
+                </a>
+
+                <div class="link-card discord-user">
+                    <img src="images/avatar.png" alt="Keita's Discord Avatar" class="discord-avatar" loading="lazy">
+                    <div class="link-text">
+                        <div class="link-title">Keita</div>
+                        <div class="discord-desc">
+                            <span class="discord-username" id="discordUsername">im_keita</span>
+                            <button class="copy-btn" data-copy="#discordUsername" aria-label="Copy username">
+                                <i class="fas fa-copy"></i>
+                            </button>
+                        </div>
+                    </div>
                 </div>
-                <div class="link-text">
-                    <div class="link-title">Discord</div>
-                    <div class="link-desc">Join our community server</div>
-                </div>
-            </a>
+            </div>
             
             <!-- Support Dropdown -->
             <div class="dropdown-container">
                 <button class="link-card" data-dropdown="supportDropdown" aria-expanded="false" aria-controls="supportDropdown">
-                    <div class="link-icon" aria-hidden="true">
+                    <div class="link-icon">
                         <i class="fas fa-heart"></i>
                     </div>
                     <div class="link-text">
@@ -78,7 +91,7 @@
                 
                 <div id="supportDropdown" class="dropdown-content">
                     <a href="https://ko-fi.com/yourname" target="_blank" rel="noopener noreferrer">
-                        <div class="link-icon" aria-hidden="true">
+                        <div class="link-icon">
                             <i class="fas fa-mug-hot"></i>
                         </div>
                         <div class="link-text">
@@ -87,7 +100,7 @@
                         </div>
                     </a>
                     <a href="https://patreon.com/yourname" target="_blank" rel="noopener noreferrer">
-                        <div class="link-icon" aria-hidden="true">
+                        <div class="link-icon">
                             <i class="fab fa-patreon"></i>
                         </div>
                         <div class="link-text">
@@ -98,33 +111,33 @@
                 </div>
             </div>
             
-            <!-- Warning Link -->
+            <!-- Warning Dropdown -->
             <div class="dropdown-container">
                 <button class="link-card" data-dropdown="warningDropdown" aria-expanded="false" aria-controls="warningDropdown">
-                    <div class="link-icon warning-icon" aria-hidden="true">
+                    <div class="link-icon warning-icon">
                         <i class="fas fa-exclamation-triangle"></i>
                     </div>
                     <div class="link-text">
                         <div class="link-title">NSFW Content</div>
-                        <div class="link-desc">Click to confirm age</div>
+                        <div class="link-desc">Age verification required</div>
                     </div>
                     <i class="fas fa-chevron-down dropdown-arrow" aria-hidden="true"></i>
                 </button>
                 
                 <div id="warningDropdown" class="dropdown-content warning-content">
                     <div class="warning-message">
-                        <p><strong>This content is for adults only</strong></p>
-                        <p>You must be 18 years or older to access this content. By proceeding, you confirm you are of legal age.</p>
+                        <p><strong>Adult Content Warning</strong></p>
+                        <p>You must be 18+ to access this content. By proceeding, you confirm you're of legal age.</p>
                     </div>
                     <div class="warning-buttons">
                         <button class="warning-button cancel-button" data-action="close" data-dropdown="warningDropdown">Cancel</button>
-                        <button class="warning-button confirm-button" data-action="confirm" data-link="https://example.com">Confirm</button>
+                        <button class="warning-button confirm-button" data-action="confirm" data-link="https://example.com">Confirm </button>
                     </div>
                 </div>
             </div>
         </nav>
     </div>
 
-    <script src="script.js"></script>
+    <script src="script.js" defer></script>
 </body>
 </html>

@@ -28,6 +28,7 @@
     --transition-slow: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* Base Styles */
 * {
     margin: 0;
     padding: 0;
@@ -71,7 +72,7 @@ body {
     background: #ff4da6;
 }
 
-/* Container */
+/* Layout */
 .container {
     max-width: 500px;
     width: 100%;
@@ -79,7 +80,7 @@ body {
     padding: 0 15px;
 }
 
-/* Profile */
+/* Profile Section */
 .profile {
     text-align: center;
     margin-bottom: 30px;
@@ -114,11 +115,12 @@ h1 {
     margin-bottom: 20px;
 }
 
-/* Links */
+/* Links Section */
 .links {
     display: flex;
     flex-direction: column;
     gap: 15px;
+    width: 100%;
 }
 
 .link-card {
@@ -184,7 +186,7 @@ h1 {
     text-overflow: ellipsis;
 }
 
-/* Dropdown styles */
+/* Dropdown Styles */
 .dropdown-container {
     position: relative;
     width: 100%;
@@ -193,8 +195,6 @@ h1 {
 .dropdown-content {
     position: relative;
     display: block;
-    top: 100%;
-    left: 0;
     width: 100%;
     background-color: var(--bg-card);
     border-radius: 0 0 var(--border-radius) var(--border-radius);
@@ -254,39 +254,7 @@ h1 {
     transition: var(--transition-slow);
 }
 
-/* Warning content */
-/* .warning-content::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: repeating-linear-gradient(
-      45deg,
-      rgba(255, 0, 0, 0.2) 0px,
-      rgba(255, 0, 0, 0.2) 10px,
-      rgba(255, 255, 0, 0.2) 10px,
-      rgba(255, 255, 0, 0.2) 20px
-    );
-    filter: blur(12px) contrast(150%);
-    animation: mosaicMove 6s linear infinite;
-    z-index: -1;
-    pointer-events: none;
-}
-
-@keyframes mosaicMove {
-    0% {
-      transform: translate(0, 0) rotate(0deg);
-    }
-    50% {
-      transform: translate(10%, 10%) rotate(180deg);
-    }
-    100% {
-      transform: translate(0, 0) rotate(360deg);
-    }
-} */
-
+/* Warning Content */
 .warning-message {
     padding: 15px;
     text-align: center;
@@ -337,7 +305,62 @@ h1 {
     background-color: rgba(255, 255, 255, 0.1);
 }
 
-/* Responsive adjustments */
+/* Discord Section */
+.discord-split {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.discord-split .link-card {
+    flex: 1 1 48%;
+    min-width: 0;
+}
+
+.discord-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 15px;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+.discord-user {
+    display: flex;
+    align-items: center;
+}
+
+.discord-user .link-text {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.discord-username {
+    margin-right: 10px;
+    font-size: 12px;
+    color: var(--text-secondary);
+    user-select: all;
+}
+
+.copy-btn {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    font-size: 14px;
+    padding: 4px;
+    transition: color var(--transition-fast);
+}
+
+.copy-btn:hover,
+.copy-btn:focus {
+    color: var(--color-primary);
+    outline: none;
+}
+
+/* Responsive Design */
 @media (max-width: 600px) {
     .container {
         padding: 0 10px;
@@ -354,6 +377,10 @@ h1 {
     
     .link-card {
         padding: 12px;
+    }
+    
+    .discord-split .link-card {
+        flex: 1 1 100%;
     }
 }
 
