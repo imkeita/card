@@ -1,5 +1,7 @@
 class LinkTreeApp {
     constructor() {
+        this.captchaText = '';
+        this.businessEmail = 'contact@example.com';
         this.dropdowns = [];
         this.init();
     }
@@ -7,62 +9,89 @@ class LinkTreeApp {
     init() {
         this.cacheElements();
         this.setupEventListeners();
+        this.generateCaptcha();
     }
 
     cacheElements() {
         this.dropdownTriggers = document.querySelectorAll('[data-dropdown]');
         this.dropdowns = document.querySelectorAll('.dropdown-content');
         this.copyButtons = document.querySelectorAll('.copy-btn');
+        this.captchaTextElement = document.getElementById('captchaText');
+        this.captchaInput = document.getElementById('captchaInput');
+        this.refreshCaptchaBtn = document.getElementById('refreshCaptcha');
+        this.verifyCaptchaBtn = document.getElementById('verifyCaptcha');
+        this.emailResult = document.getElementById('emailResult');
+        this.businessEmailElement = document.getElementById('businessEmail');
     }
 
     setupEventListeners() {
-        // Dropdown triggers
-        document.addEventListener('click', (e) => {
-            const trigger = e.target.closest('[data-dropdown]');
-            if (trigger) {
-                e.preventDefault();
-                const dropdownId = trigger.getAttribute('data-dropdown');
-                this.toggleDropdown(dropdownId, trigger);
-                return;
-            }
-
-            // Close dropdowns when clicking outside
-            if (!e.target.closest('.dropdown-container')) {
-                this.closeAllDropdowns();
-            }
-        });
-
-        // Action buttons (confirm/cancel)
-        document.addEventListener('click', (e) => {
-            const button = e.target.closest('[data-action]');
-            if (!button) return;
-            
-            const action = button.getAttribute('data-action');
-            const dropdownId = button.getAttribute('data-dropdown');
-            
-            switch (action) {
-                case 'close':
-                    this.closeDropdown(dropdownId);
-                    break;
-                case 'confirm':
-                    const link = button.getAttribute('data-link');
-                    window.open(link, '_blank');
-                    this.closeAllDropdowns();
-                    break;
-            }
-        });
-
-        // Keyboard accessibility
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') {
-                this.closeAllDropdowns();
-            }
-        });
-
+        // Use event delegation for better performance
+        document.addEventListener('click', this.handleDocumentClick.bind(this));
+        document.addEventListener('keydown', this.handleKeyEvents.bind(this));
+        
+        // Specific event listeners
+        if (this.refreshCaptchaBtn) {
+            this.refreshCaptchaBtn.addEventListener('click', () => this.generateCaptcha());
+        }
+        
+        if (this.verifyCaptchaBtn) {
+            this.verifyCaptchaBtn.addEventListener('click', () => this.verifyCaptcha());
+        }
+        
+        if (this.captchaInput) {
+            this.captchaInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') this.verifyCaptcha();
+            });
+        }
+        
         // Copy buttons
         this.copyButtons.forEach(button => {
             button.addEventListener('click', this.handleCopyClick.bind(this));
         });
+    }
+
+    handleDocumentClick(e) {
+        const trigger = e.target.closest('[data-dropdown]');
+        if (trigger) {
+            e.preventDefault();
+            const dropdownId = trigger.getAttribute('data-dropdown');
+            this.toggleDropdown(dropdownId, trigger);
+            return;
+        }
+
+        // Handle action buttons
+        const actionButton = e.target.closest('[data-action]');
+        if (actionButton) {
+            this.handleActionButton(actionButton);
+            return;
+        }
+
+        // Close dropdowns when clicking outside
+        if (!e.target.closest('.dropdown-container')) {
+            this.closeAllDropdowns();
+        }
+    }
+
+    handleKeyEvents(e) {
+        if (e.key === 'Escape') {
+            this.closeAllDropdowns();
+        }
+    }
+
+    handleActionButton(button) {
+        const action = button.getAttribute('data-action');
+        const dropdownId = button.getAttribute('data-dropdown');
+        
+        switch (action) {
+            case 'close':
+                this.closeDropdown(dropdownId);
+                break;
+            case 'confirm':
+                const link = button.getAttribute('data-link');
+                window.open(link, '_blank');
+                this.closeAllDropdowns();
+                break;
+        }
     }
 
     handleCopyClick(e) {
@@ -73,19 +102,21 @@ class LinkTreeApp {
         if (!target) return;
         
         const text = target.textContent;
-        navigator.clipboard.writeText(text).then(() => {
-            const icon = button.querySelector('i');
-            if (!icon) return;
-            
-            const originalIcon = icon.className;
-            icon.className = 'fas fa-check';
-            
-            setTimeout(() => {
-                icon.className = originalIcon;
-            }, 2000);
-        }).catch(err => {
-            console.error('Failed to copy text: ', err);
-        });
+        navigator.clipboard.writeText(text)
+            .then(() => this.showCopySuccess(button))
+            .catch(err => console.error('Failed to copy text: ', err));
+    }
+
+    showCopySuccess(button) {
+        const icon = button.querySelector('i');
+        if (!icon) return;
+        
+        const originalIcon = icon.className;
+        icon.className = 'fas fa-check';
+        
+        setTimeout(() => {
+            icon.className = originalIcon;
+        }, 2000);
     }
 
     toggleDropdown(dropdownId, trigger) {
@@ -101,23 +132,74 @@ class LinkTreeApp {
     
         // Toggle the dropdown
         dropdown.classList.toggle('show', isOpening);
-    
-        // Update ARIA attributes
+        this.updateDropdownAccessibility(trigger, isOpening);
+        this.animateDropdown(dropdown, isOpening);
+    }
+
+    updateDropdownAccessibility(trigger, isExpanded) {
         if (trigger) {
-            const isExpanded = dropdown.classList.contains('show');
             trigger.setAttribute('aria-expanded', isExpanded);
         }
-    
-        // Animate chevron
+    }
+
+    animateDropdown(dropdown, isOpening) {
         const chevron = dropdown.closest('.dropdown-container')?.querySelector('.dropdown-arrow');
         if (chevron) {
             chevron.style.transform = isOpening ? 'rotate(180deg)' : 'rotate(0deg)';
         }
     
-        // Animate dropdown items
         if (isOpening) {
             this.animateDropdownItems(dropdown);
+            this.ensureDropdownVisibility(dropdown);
         }
+    }
+
+    generateCaptcha() {
+        const chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        let captcha = '';
+        
+        for (let i = 0; i < 6; i++) {
+            captcha += chars.charAt(Math.floor(Math.random() * chars.length));
+        }
+        
+        this.captchaText = captcha;
+        this.captchaTextElement.textContent = captcha;
+        this.captchaInput.value = '';
+        this.emailResult.style.display = 'none';
+    }
+
+    verifyCaptcha() {
+        const userInput = this.captchaInput.value.trim();
+        
+        if (!userInput) {
+            this.showAlert('Please enter the CAPTCHA text');
+            return;
+        }
+        
+        if (userInput === this.captchaText) {
+            this.showEmailResult();
+        } else {
+            this.handleCaptchaFailure();
+        }
+    }
+
+    showEmailResult() {
+        this.businessEmailElement.textContent = this.businessEmail;
+        this.emailResult.style.display = 'block';
+        
+        setTimeout(() => {
+            this.emailResult.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }, 100);
+    }
+
+    handleCaptchaFailure() {
+        this.showAlert('CAPTCHA verification failed. Please try again.');
+        this.generateCaptcha();
+    }
+
+    showAlert(message) {
+        // Could be replaced with a more sophisticated notification system
+        alert(message);
     }
 
     animateDropdownItems(dropdown) {
@@ -128,8 +210,9 @@ class LinkTreeApp {
                 item.style.transform = 'translateY(0)';
             }, 100 * (index + 1));
         });
+    }
 
-        // Scroll into view if needed
+    ensureDropdownVisibility(dropdown) {
         setTimeout(() => {
             const dropdownRect = dropdown.getBoundingClientRect();
             const bottomOverflow = dropdownRect.bottom - window.innerHeight;
@@ -145,21 +228,21 @@ class LinkTreeApp {
         if (!dropdown || !dropdown.classList.contains('show')) return;
         
         dropdown.classList.remove('show');
-        
-        // Update ARIA attributes
+        this.resetDropdownState(dropdownId);
+    }
+
+    resetDropdownState(dropdownId) {
         const trigger = document.querySelector(`[data-dropdown="${dropdownId}"]`);
         if (trigger) {
             trigger.setAttribute('aria-expanded', 'false');
         }
         
-        // Reset chevron
-        const chevron = dropdown.closest('.dropdown-container')?.querySelector('.dropdown-arrow');
+        const chevron = document.querySelector(`#${dropdownId}`).closest('.dropdown-container')?.querySelector('.dropdown-arrow');
         if (chevron) {
             chevron.style.transform = 'rotate(0deg)';
         }
         
-        // Reset item animations
-        const items = dropdown.querySelectorAll('a, button');
+        const items = document.querySelectorAll(`#${dropdownId} a, #${dropdownId} button`);
         items.forEach(item => {
             item.style.opacity = '0';
             item.style.transform = 'translateY(-10px)';
@@ -177,5 +260,10 @@ class LinkTreeApp {
 
 // Initialize the app when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
-    new LinkTreeApp();
+    try {
+        new LinkTreeApp();
+    } catch (error) {
+        console.error('Failed to initialize LinkTreeApp:', error);
+        // Fallback UI or error message could be shown here
+    }
 });

@@ -51,6 +51,7 @@ body {
     background-image: 
         radial-gradient(circle at 20% 30%, rgba(255, 102, 178, 0.1) 0%, transparent 20%), 
         radial-gradient(circle at 80% 70%, rgba(102, 179, 255, 0.1) 0%, transparent 20%);
+    background-attachment: fixed; /* Prevent background from scrolling */
     line-height: 1.5;
 }
 
@@ -184,6 +185,105 @@ h1 {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+/* Email CAPTCHA Styles */
+.captcha-container {
+    padding: 15px;
+    text-align: center;
+}
+
+.captcha-container p {
+    margin-bottom: 10px;
+    font-size: 14px;
+}
+
+.captcha-challenge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+#captchaText {
+    font-family: 'Courier New', monospace;
+    font-size: 24px;
+    letter-spacing: 3px;
+    padding: 5px 10px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    user-select: none;
+}
+
+#refreshCaptcha {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    font-size: 16px;
+    transition: var(--transition-fast);
+}
+
+#refreshCaptcha:hover {
+    color: var(--color-primary);
+    transform: rotate(180deg);
+}
+
+#captchaInput {
+    width: 100%;
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid var(--border-color);
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.verify-button {
+    width: 100%;
+    padding: 10px;
+    border-radius: 6px;
+    border: none;
+    background-color: var(--color-primary);
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition-fast);
+}
+
+.verify-button:hover {
+    background-color: #ff4da6;
+}
+
+.email-result {
+    display: none;
+    padding: 15px;
+    text-align: center;
+    border-top: 1px solid var(--border-color);
+}
+
+.email-result p {
+    margin-bottom: 10px;
+    word-break: break-all;
+}
+
+.email-result .copy-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 8px 15px;
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    color: var(--text-primary);
+    transition: var(--transition-fast);
+}
+
+.email-result .copy-btn:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-color: var(--color-primary);
 }
 
 /* Dropdown Styles */

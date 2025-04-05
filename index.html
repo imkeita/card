@@ -15,10 +15,10 @@
         <header class="profile">
             <img src="images/avatar.png" alt="Keita's avatar" class="avatar" width="150" height="150" loading="lazy">
             <h1>Keita</h1>
-            <p class="subtitle">Digital Creator & Streamer</p>
+            <p class="subtitle">Some description</p>
         </header>
         
-        <nav class="links" aria-label="Social links">
+        <main class="links" aria-label="Social links">
             <!-- Social Links -->
             <a href="https://twitch.tv/yourchannel" class="link-card" target="_blank" rel="noopener noreferrer">
                 <div class="link-icon" aria-hidden="true">
@@ -26,17 +26,16 @@
                 </div>
                 <div class="link-text">
                     <div class="link-title">Twitch</div>
-                    <div class="link-desc">Live streams every weekend</div>
+                    <div class="link-desc">Watch me stream live</div>
                 </div>
             </a>
             
             <a href="https://youtube.com/yourchannel" class="link-card" target="_blank" rel="noopener noreferrer">
                 <div class="link-icon" aria-hidden="true">
-                    <i class="fab fa-youtube"></i>
-                </div>
+                    <i class="fab fa-youtube"></i></div>
                 <div class="link-text">
                     <div class="link-title">YouTube</div>
-                    <div class="link-desc">Highlights and tutorials</div>
+                    <div class="link-desc">Check out my videos and clips</div>
                 </div>
             </a>
             
@@ -46,11 +45,10 @@
                 </div>
                 <div class="link-text">
                     <div class="link-title">Twitter</div>
-                    <div class="link-desc">Daily updates and thoughts</div>
+                    <div class="link-desc">Follow for updates and memes</div>
                 </div>
             </a>
             
-            <!-- Discord Section -->
             <div class="discord-split">
                 <a href="https://discord.gg/yourinvite" class="link-card" target="_blank" rel="noopener noreferrer">
                     <div class="link-icon" aria-hidden="true">
@@ -63,7 +61,7 @@
                 </a>
 
                 <div class="link-card discord-user">
-                    <img src="images/avatar.png" alt="Keita's Discord Avatar" class="discord-avatar" loading="lazy">
+                    <img src="images/avatar.png" alt="Discord Avatar" class="discord-avatar" loading="lazy">
                     <div class="link-text">
                         <div class="link-title">Keita</div>
                         <div class="discord-desc">
@@ -84,7 +82,7 @@
                     </div>
                     <div class="link-text">
                         <div class="link-title">Support Me</div>
-                        <div class="link-desc">Buy me a bubble tea!</div>
+                        <div class="link-desc">Buy me a bubble tea</div>
                     </div>
                     <i class="fas fa-chevron-down dropdown-arrow" aria-hidden="true"></i>
                 </button>
@@ -110,6 +108,40 @@
                     </a>
                 </div>
             </div>
+
+            <!-- Email Section -->
+            <div class="dropdown-container">
+                <button class="link-card" data-dropdown="emailDropdown" aria-expanded="false" aria-controls="emailDropdown" aria-haspopup="true">
+                    <div class="link-icon" aria-hidden="true">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <div class="link-text">
+                        <div class="link-title">Business Email</div>
+                        <div class="link-desc">Click to reveal</div>
+                    </div>
+                    <i class="fas fa-chevron-down dropdown-arrow" aria-hidden="true"></i>
+                </button>
+                
+                <div id="emailDropdown" class="dropdown-content" role="menu">
+                    <div class="captcha-container">
+                        <p>Please verify you're human:</p>
+                        <div class="captcha-challenge">
+                            <span id="captchaText" aria-live="polite"></span>
+                            <button id="refreshCaptcha" aria-label="Refresh CAPTCHA">
+                                <i class="fas fa-sync-alt"></i>
+                            </button>
+                        </div>
+                        <input type="text" id="captchaInput" placeholder="Enter the text above" aria-label="CAPTCHA input">
+                        <button id="verifyCaptcha" class="verify-button">Verify</button>
+                    </div>
+                    <div id="emailResult" class="email-result" aria-live="polite">
+                        <p>Email: <span id="businessEmail"></span></p>
+                        <button class="copy-btn" data-copy="#businessEmail" aria-label="Copy email">
+                            <i class="fas fa-copy"></i> Copy
+                        </button>
+                    </div>
+                </div>
+            </div>
             
             <!-- Warning Dropdown -->
             <div class="dropdown-container">
@@ -119,7 +151,7 @@
                     </div>
                     <div class="link-text">
                         <div class="link-title">NSFW Content</div>
-                        <div class="link-desc">Age verification required</div>
+                        <div class="link-desc">Click to confirm age</div>
                     </div>
                     <i class="fas fa-chevron-down dropdown-arrow" aria-hidden="true"></i>
                 </button>
@@ -131,7 +163,7 @@
                     </div>
                     <div class="warning-buttons">
                         <button class="warning-button cancel-button" data-action="close" data-dropdown="warningDropdown">Cancel</button>
-                        <button class="warning-button confirm-button" data-action="confirm" data-link="https://example.com">Confirm </button>
+                        <button class="warning-button confirm-button" data-action="confirm" data-link="https://example.com">Confirm</button>
                     </div>
                 </div>
             </div>
