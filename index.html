@@ -6,9 +6,9 @@
     <meta name="description" content="Keita's social links and content">
     <meta name="theme-color" content="#1a1a2e">
     <title>Keita | Links</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
     <link rel="stylesheet" href="style.css">
-    <link rel="icon" href="images/favicon.png" type="image/x-icon">
+    <link rel="icon" href="images/favicon.ico" type="image/x-icon">
 </head>
 <body>
     <div class="container">
@@ -20,7 +20,7 @@
         
         <main class="links" aria-label="Social links">
             <!-- Social Links -->
-            <a href="https://twitch.tv/yourchannel" class="link-card" target="_blank" rel="noopener noreferrer">
+            <button class="link-card link-button" data-link="https://twitch.tv/example">
                 <div class="link-icon" aria-hidden="true">
                     <i class="fab fa-twitch"></i>
                 </div>
@@ -28,29 +28,29 @@
                     <div class="link-title">Twitch</div>
                     <div class="link-desc">Watch me stream live</div>
                 </div>
-            </a>
-            
-            <a href="https://youtube.com/yourchannel" class="link-card" target="_blank" rel="noopener noreferrer">
+            </button>
+
+            <button class="link-card link-button" data-link="https://youtube.com/example">
                 <div class="link-icon" aria-hidden="true">
                     <i class="fab fa-youtube"></i></div>
                 <div class="link-text">
                     <div class="link-title">YouTube</div>
                     <div class="link-desc">Check out my videos and clips</div>
                 </div>
-            </a>
-            
-            <a href="https://twitter.com/yourhandle" class="link-card" target="_blank" rel="noopener noreferrer">
+            </button>
+
+            <button class="link-card link-button" data-link="https://x.com/example">
                 <div class="link-icon" aria-hidden="true">
-                    <i class="fab fa-twitter"></i>
+                    <i class="fab fa-x-twitter"></i>
                 </div>
                 <div class="link-text">
                     <div class="link-title">Twitter</div>
                     <div class="link-desc">Follow for updates and memes</div>
                 </div>
-            </a>
+            </button>
             
             <div class="discord-split">
-                <a href="https://discord.gg/yourinvite" class="link-card" target="_blank" rel="noopener noreferrer">
+                <button class="link-card link-button" data-link="https://discord.gg/example">
                     <div class="link-icon" aria-hidden="true">
                         <i class="fab fa-discord"></i>
                     </div>
@@ -58,20 +58,18 @@
                         <div class="link-title">Discord Server</div>
                         <div class="link-desc">Join our community</div>
                     </div>
-                </a>
+                </button>
 
-                <div class="link-card discord-user">
+                <button class="link-card discord-user copy-btn" data-copy="#discordUsername" aria-label="Copy username">
                     <img src="images/avatar.png" alt="Discord Avatar" class="discord-avatar" loading="lazy">
                     <div class="link-text">
                         <div class="link-title">Keita</div>
                         <div class="discord-desc">
                             <span class="discord-username" id="discordUsername">im_keita</span>
-                            <button class="copy-btn" data-copy="#discordUsername" aria-label="Copy username">
-                                <i class="fas fa-copy"></i>
-                            </button>
+                            <i class="fas fa-copy"></i>
                         </div>
                     </div>
-                </div>
+                </button>
             </div>
             
             <!-- Support Dropdown -->
@@ -88,7 +86,7 @@
                 </button>
                 
                 <div id="supportDropdown" class="dropdown-content">
-                    <a href="https://ko-fi.com/yourname" target="_blank" rel="noopener noreferrer">
+                    <a href="https://ko-fi.com/example" target="_blank" rel="noopener noreferrer">
                         <div class="link-icon">
                             <i class="fas fa-mug-hot"></i>
                         </div>
@@ -97,7 +95,7 @@
                             <div class="link-desc">One-time donations</div>
                         </div>
                     </a>
-                    <a href="https://patreon.com/yourname" target="_blank" rel="noopener noreferrer">
+                    <a href="https://patreon.com/example" target="_blank" rel="noopener noreferrer">
                         <div class="link-icon">
                             <i class="fab fa-patreon"></i>
                         </div>
@@ -110,7 +108,7 @@
             </div>
 
             <!-- Email Section -->
-            <div class="dropdown-container">
+            <!-- <div class="dropdown-container">
                 <button class="link-card" data-dropdown="emailDropdown" aria-expanded="false" aria-controls="emailDropdown" aria-haspopup="true">
                     <div class="link-icon" aria-hidden="true">
                         <i class="fas fa-envelope"></i>
@@ -141,7 +139,7 @@
                         </button>
                     </div>
                 </div>
-            </div>
+            </div> -->
             
             <!-- Warning Dropdown -->
             <div class="dropdown-container">
