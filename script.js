@@ -7,6 +7,8 @@ class LinkTreeApp {
     // === Initialization ===
     init() {
         this.cacheElements();
+        this.createToastContainer();
+        this.createModal();
         this.addEventListeners();
     }
 
@@ -51,16 +53,75 @@ class LinkTreeApp {
                 this.showIconSwap(button.querySelector('i'), 'fas fa-check');
                 this.showSpeechBubble(button.querySelector('i'), 'Copied!');
             })
-            .catch(err => console.error('Copy failed:', err));
+            .catch(err => {
+                this.showIconSwap(button.querySelector('i'), 'fas fa-xmark');
+                this.showSpeechBubble(button.querySelector('i'), 'Copy failed!');
+                // this.showToast('Copy failed!', 'error');
+                console.error('Copy failed:', err);
+            });
     }
 
     showIconSwap(icon, tempClass) {
         if (!icon) return;
-        const originalClass = icon.className;
+    
+        const existingTimeout = icon.dataset.iconTimeout;
+        if (existingTimeout) {
+            clearTimeout(Number(existingTimeout));
+            delete icon.dataset.iconTimeout;
+        }
+    
+        const originalClass = 'fas fa-copy';
         icon.className = tempClass;
-        setTimeout(() => {
+    
+        const timeout = setTimeout(() => {
             icon.className = originalClass;
+            delete icon.dataset.iconTimeout;
         }, 2000);
+    
+        icon.dataset.iconTimeout = timeout;
+    }
+
+    // === Toasts ===
+    createToastContainer() {
+        this.toastContainer = document.createElement('div');
+        this.toastContainer.className = 'toast-container';
+        document.body.appendChild(this.toastContainer);
+    }
+
+    showToast(message, type = 'info') {
+        const toast = document.createElement('div');
+        toast.className = `toast toast-${type}`;
+        toast.textContent = message;
+        this.toastContainer.appendChild(toast);
+
+        setTimeout(() => toast.classList.add('show'), 10);
+        setTimeout(() => toast.classList.remove('show'), 3000);
+        setTimeout(() => toast.remove(), 3500);
+    }
+
+    // === Modal ===
+    createModal() {
+        this.modalOverlay = document.createElement('div');
+        this.modalOverlay.className = 'modal-overlay';
+        this.modalOverlay.innerHTML = `
+            <div class="modal">
+                <h2 class="modal-title"></h2>
+                <p class="modal-message"></p>
+                <button class="modal-close">OK</button>
+            </div>
+        `;
+        document.body.appendChild(this.modalOverlay);
+
+        this.modalOverlay.querySelector('.modal-close').addEventListener('click', () => {
+            this.modalOverlay.classList.remove('show');
+        });
+    }
+
+    showModal(title, message) {
+        const modal = this.modalOverlay;
+        modal.querySelector('.modal-title').textContent = title;
+        modal.querySelector('.modal-message').textContent = message;
+        modal.classList.add('show');
     }
 
     // === Speech Bubble ===

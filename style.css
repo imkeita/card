@@ -1,39 +1,33 @@
-/* ======================== */
-/* Root Variables           */
-/* ======================== */
+/* ================================= */
+/* ========== VARIABLES ============ */
+/* ================================= */
 :root {
-  /* Colors */
   --color-primary: #ff66b2;
   --color-secondary: #66b3ff;
   --color-warning: #ff4757;
   --color-success: #2ecc71;
 
-  /* Backgrounds */
   --bg-primary: #1a1a2e;
   --bg-card: #16213e;
 
-  /* Text */
   --text-primary: #f8f8f8;
   --text-secondary: rgba(248, 248, 248, 0.8);
 
-  /* Borders */
   --border-radius: 12px;
   --border-color: rgba(255, 255, 255, 0.1);
 
-  /* Shadows */
   --shadow-sm: 0 4px 6px rgba(0, 0, 0, 0.1);
   --shadow-md: 0 6px 12px rgba(0, 0, 0, 0.2);
   --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.2);
 
-  /* Transitions */
   --transition-fast: 0.2s ease;
   --transition-normal: 0.3s ease;
   --transition-slow: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* ======================== */
-/* Base Styles              */
-/* ======================== */
+/* ================================= */
+/* ========== BASE STYLES ========== */
+/* ================================= */
 * {
   margin: 0;
   padding: 0;
@@ -47,9 +41,8 @@ html {
 body {
   font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
   background-color: var(--bg-primary);
-  background-image: 
-    radial-gradient(circle at 20% 30%, rgba(255, 102, 178, 0.1) 0%, transparent 20%),
-    radial-gradient(circle at 80% 70%, rgba(102, 179, 255, 0.1) 0%, transparent 20%);
+  background-image: radial-gradient(circle at 20% 30%, rgba(255, 102, 178, 0.1) 0%, transparent 20%),
+                    radial-gradient(circle at 80% 70%, rgba(102, 179, 255, 0.1) 0%, transparent 20%);
   background-attachment: fixed;
   color: var(--text-primary);
   display: flex;
@@ -75,9 +68,9 @@ body {
   background: #ff4da6;
 }
 
-/* ======================== */
-/* Layout                   */
-/* ======================== */
+/* ================================= */
+/* ========== LAYOUT =============== */
+/* ================================= */
 .container {
   max-width: 500px;
   width: 100%;
@@ -85,9 +78,9 @@ body {
   padding: 0 15px;
 }
 
-/* ======================== */
-/* Profile Section          */
-/* ======================== */
+/* ================================= */
+/* ========== PROFILE ============== */
+/* ================================= */
 .profile {
   text-align: center;
   margin-bottom: 30px;
@@ -122,9 +115,9 @@ h1 {
   margin-bottom: 20px;
 }
 
-/* ======================== */
-/* Link Cards               */
-/* ======================== */
+/* ================================= */
+/* ========== LINK CARDS =========== */
+/* ================================= */
 .links {
   display: flex;
   flex-direction: column;
@@ -195,9 +188,9 @@ h1 {
   white-space: nowrap;
 }
 
-/* ======================== */
-/* Discord Section          */
-/* ======================== */
+/* ================================= */
+/* ========== DISCORD ============== */
+/* ================================= */
 .discord-split {
   display: flex;
   flex-wrap: wrap;
@@ -246,9 +239,9 @@ h1 {
   transition: var(--transition-fast);
 }
 
-/* ======================== */
-/* Dropdown                 */
-/* ======================== */
+/* ================================= */
+/* ========== DROPDOWNS ============ */
+/* ================================= */
 .dropdown-container {
   position: relative;
   width: 100%;
@@ -294,6 +287,7 @@ h1 {
   opacity: 1;
   transform: translateY(0);
 }
+
 .dropdown-content.show a:nth-child(1) { transition-delay: 0.1s; }
 .dropdown-content.show a:nth-child(2) { transition-delay: 0.2s; }
 
@@ -315,9 +309,9 @@ h1 {
   transition: var(--transition-slow);
 }
 
-/* ======================== */
-/* CAPTCHA + Email          */
-/* ======================== */
+/* ================================= */
+/* ========== CAPTCHA + EMAIL ====== */
+/* ================================= */
 .captcha-container {
   padding: 15px;
   text-align: center;
@@ -416,9 +410,9 @@ h1 {
   border-color: var(--color-primary);
 }
 
-/* ======================== */
-/* Warning Content          */
-/* ======================== */
+/* ================================= */
+/* ========== WARNING BLOCK ======== */
+/* ================================= */
 .warning-message {
   font-size: 14px;
   padding: 15px;
@@ -469,9 +463,184 @@ h1 {
   background-color: rgba(255, 255, 255, 0.1);
 }
 
-/* ======================== */
-/* Responsive Design        */
-/* ======================== */
+/* ================================= */
+/* ========== MODAL & TOAST ======== */
+/* ================================= */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
+  padding: 20px;
+}
+
+.modal-overlay.show {
+  display: flex;
+}
+
+.modal {
+  background: var(--bg-card);
+  color: var(--text-primary);
+  border-radius: var(--border-radius);
+  padding: 20px 30px;
+  max-width: 400px;
+  width: 100%;
+  box-shadow: var(--shadow-lg);
+  text-align: center;
+  animation: fadeInModal 0.3s ease;
+}
+
+.modal-title {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: var(--color-primary);
+}
+
+.modal-message {
+  font-size: 16px;
+  margin-bottom: 20px;
+  color: var(--text-secondary);
+}
+
+.modal-close {
+  background-color: var(--color-primary);
+  border: none;
+  color: white;
+  padding: 10px 16px;
+  font-size: 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.modal-close:hover {
+  background-color: #ff4da6;
+}
+
+.toast-container {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.toast {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.3s ease;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  color: var(--text-primary);
+  background-color: var(--bg-card);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.toast.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.toast-error {
+  background-color: var(--color-warning);
+}
+
+.toast-info {
+  background-color: var(--color-success);
+}
+
+/* ================================= */
+/* ========== SPEECH BUBBLES ======= */
+/* ================================= */
+.speech-bubble {
+  position: absolute;
+  background-color: var(--bg-card);
+  color: var(--text-primary);
+  padding: 8px 12px;
+  border-radius: var(--border-radius);
+  font-size: 14px;
+  font-weight: 600;
+  border: 1px solid var(--color-primary);
+  opacity: 0;
+  transform: translate(-50%, -10px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  pointer-events: none;
+  z-index: 100;
+  max-width: 120px;
+  text-align: center;
+  margin-bottom: 10px;
+  box-shadow: 0 0 10px rgba(255, 102, 178, 0.3);
+}
+
+.speech-bubble::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 10px 8px 0;
+  border-style: solid;
+  border-color: var(--bg-card) transparent transparent;
+  filter: drop-shadow(0 0 10px rgba(255, 102, 178, 0.3));
+}
+
+.speech-bubble.visible {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+.copy-bubble {
+  position: absolute;
+  transform: translateX(-50%);
+  background: #333;
+  color: #fff;
+  padding: 4px 8px;
+  border-radius: 8px;
+  font-size: 12px;
+  white-space: nowrap;
+  z-index: 999;
+  opacity: 0;
+  animation: fadeInOut 2s ease;
+  pointer-events: none;
+}
+
+.copy-bubble.cat-bubble {
+  background: #292941;
+  color: #ffccff;
+  font-family: "Comic Sans MS", cursive, sans-serif;
+}
+
+/* ================================= */
+/* ========== ANIMATIONS =========== */
+/* ================================= */
+@keyframes fadeInOut {
+  0% { opacity: 0; transform: translateX(-50%) translateY(10px); }
+  10% { opacity: 1; transform: translateX(-50%) translateY(0); }
+  90% { opacity: 1; transform: translateX(-50%) translateY(0); }
+  100% { opacity: 0; transform: translateX(-50%) translateY(-10px); }
+}
+
+@keyframes fadeInModal {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* ================================= */
+/* ========== RESPONSIVE =========== */
+/* ================================= */
 @media (max-width: 600px) {
   .container {
     padding: 0 10px;
@@ -506,76 +675,4 @@ h1 {
   .link-title {
     font-size: 15px;
   }
-}
-
-/* Add to your CSS */
-.speech-bubble {
-  position: absolute;
-  background-color: var(--bg-card);
-  color: var(--text-primary);
-  padding: 8px 12px;
-  border-radius: var(--border-radius);
-  font-size: 14px;
-  font-weight: 600;
-  box-shadow: var(--shadow-md);
-  border: 1px solid var(--color-primary);
-  opacity: 0;
-  transform: translate(-50%, -10px);
-  transition: opacity 0.3s ease, transform 0.3s ease;
-  pointer-events: none;
-  z-index: 100;
-  max-width: 120px;
-  text-align: center;
-  margin-bottom: 10px;
-  box-shadow: 0 0 10px rgba(255, 102, 178, 0.3);
-}
-
-.speech-bubble::after {
-  content: '';
-  position: absolute;
-  bottom: -10px;
-  left: 50%;
-  transform: translateX(-50%);
-  border-width: 10px 8px 0;
-  border-style: solid;
-  border-color: var(--bg-card) transparent transparent;
-  filter: drop-shadow(0 0 10px rgba(255, 102, 178, 0.3));
-}
-
-.speech-bubble.visible {
-  opacity: 1;
-  transform: translate(-50%, 0);
-}
-
-/* Add this to make the avatar container position-relative */
-.discord-user {
-  position: relative;
-}
-
-.copy-bubble {
-  position: absolute;
-  transform: translateX(-50%);
-  background: #333;
-  color: #fff;
-  padding: 4px 8px;
-  border-radius: 8px;
-  font-size: 12px;
-  white-space: nowrap;
-  z-index: 999;
-  opacity: 0;
-  animation: fadeInOut 2s ease;
-  pointer-events: none;
-}
-
-.copy-bubble.cat-bubble {
-    background: #292941;
-    color: #ffccff;
-    font-family: "Comic Sans MS", cursive, sans-serif;
-}
-
-@keyframes fadeInOut {
-  0% { opacity: 0; transform: translateX(-50%) translateY(10px); }
-  10% { opacity: 1; transform: translateX(-50%) translateY(0); }
-  90% { opacity: 1; transform: translateX(-50%) translateY(0); }
-  100% { opacity: 0; transform: translateX(-50%) translateY(-10px); }
 }
