@@ -1,34 +1,21 @@
 class LinkTreeApp {
     constructor() {
-        // this.captchaText = '';
-        // this.businessEmail = 'contact@example.com';
         this.dropdowns = [];
         this.init();
     }
 
-    // --- Initialization ---
+    // === Initialization ===
     init() {
         this.cacheElements();
         this.addEventListeners();
-        // this.generateCaptcha();
     }
 
     cacheElements() {
         this.linkButtons = document.querySelectorAll('.link-button');
+        this.copyButtons = document.querySelectorAll('.copy-btn');
         this.dropdownTriggers = document.querySelectorAll('[data-dropdown]');
         this.dropdowns = document.querySelectorAll('.dropdown-content');
-        this.copyButtons = document.querySelectorAll('.copy-btn');
-        
         this.discordAvatar = document.querySelector('.discord-avatar');
-        this.catSpeechBubble = document.getElementById('catSpeechBubble');
-
-        // this.captchaTextElement = document.getElementById('captchaText');
-        // this.captchaInput = document.getElementById('captchaInput');
-        // this.refreshCaptchaBtn = document.getElementById('refreshCaptcha');
-        // this.verifyCaptchaBtn = document.getElementById('verifyCaptcha');
-
-        // this.emailResult = document.getElementById('emailResult');
-        // this.businessEmailElement = document.getElementById('businessEmail');
     }
 
     addEventListeners() {
@@ -44,93 +31,57 @@ class LinkTreeApp {
         document.addEventListener('keydown', this.handleKeyEvents.bind(this));
 
         this.discordAvatar?.addEventListener('mouseenter', this.showCatSpeech.bind(this));
-        this.discordAvatar?.addEventListener('mouseleave', () =>
-            this.catSpeechBubble?.classList.remove('visible')
-        );
-
-        // this.refreshCaptchaBtn?.addEventListener('click', () => this.generateCaptcha());
-        // this.verifyCaptchaBtn?.addEventListener('click', () => this.verifyCaptcha());
-        // this.captchaInput?.addEventListener('keypress', (e) => {
-        //     if (e.key === 'Enter') this.verifyCaptcha();
-        // });
     }
 
-    // --- Link Handling ---
+    // === Link Handling ===
     handleLinkClick(e) {
         const link = e.currentTarget.getAttribute('data-link');
         if (link) window.open(link, '_blank', 'noopener,noreferrer');
     }
 
+    // === Copy to Clipboard ===
     handleCopyClick(e) {
         const button = e.currentTarget;
         const targetSelector = button.getAttribute('data-copy');
         const target = document.querySelector(targetSelector);
         if (!target) return;
-    
+
         navigator.clipboard.writeText(target.textContent)
-            .then(() => this.showCopySuccess(button))
+            .then(() => {
+                this.showIconSwap(button.querySelector('i'), 'fas fa-check');
+                this.showSpeechBubble(button.querySelector('i'), 'Copied!');
+            })
             .catch(err => console.error('Copy failed:', err));
     }
 
-    showCopySuccess(button) {
-        const icon = button.querySelector('i');
+    showIconSwap(icon, tempClass) {
         if (!icon) return;
-    
-        // Show checkmark animation
         const originalClass = icon.className;
-        icon.className = 'fas fa-check';
-    
-        // Create speech bubble
-        const bubble = document.createElement('div');
-        bubble.className = 'copy-bubble';
-        bubble.textContent = 'Copied!';
-        document.body.appendChild(bubble);
-    
-        // Position above the icon
-        const iconRect = icon.getBoundingClientRect();
-        bubble.style.left = `${iconRect.left + iconRect.width / 2}px`;
-        bubble.style.top = `${iconRect.top - 30}px`; // adjust height above icon
-    
+        icon.className = tempClass;
         setTimeout(() => {
             icon.className = originalClass;
-            bubble.remove();
         }, 2000);
-    }    
-
-    // --- CAPTCHA ---
-    generateCaptcha() {
-        const chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        this.captchaText = Array.from({ length: 6 }, () =>
-            chars.charAt(Math.floor(Math.random() * chars.length))
-        ).join('');
-
-        this.captchaTextElement.textContent = this.captchaText;
-        this.captchaInput.value = '';
-        this.emailResult.style.display = 'none';
     }
 
-    verifyCaptcha() {
-        const input = this.captchaInput.value.trim();
-        if (!input) return this.showAlert('Please enter the CAPTCHA text');
-        if (input === this.captchaText) return this.showEmailResult();
+    // === Speech Bubble ===
+    showSpeechBubble(target, message, variant = '') {
+        if (!target) return;
 
-        this.showAlert('CAPTCHA verification failed. Please try again.');
-        this.generateCaptcha();
+        const bubble = document.createElement('div');
+        bubble.className = `copy-bubble ${variant}`.trim();
+        bubble.textContent = message;
+        document.body.appendChild(bubble);
+
+        const rect = target.getBoundingClientRect();
+        const scrollY = window.scrollY || window.pageYOffset;
+
+        bubble.style.left = `${rect.left + rect.width / 2}px`;
+        bubble.style.top = `${rect.top + scrollY - 40}px`;
+
+        setTimeout(() => bubble.remove(), 2000);
     }
 
-    showEmailResult() {
-        this.businessEmailElement.textContent = this.businessEmail;
-        this.emailResult.style.display = 'block';
-        setTimeout(() => {
-            this.emailResult.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-        }, 100);
-    }
-
-    showAlert(message) {
-        alert(message); // Replace with a custom toast/modal if desired
-    }
-
-    // --- Dropdowns ---
+    // === Dropdown Handling ===
     handleDocumentClick(e) {
         const trigger = e.target.closest('[data-dropdown]');
         const actionButton = e.target.closest('[data-action]');
@@ -237,23 +188,11 @@ class LinkTreeApp {
         if (e.key === 'Escape') this.closeAllDropdowns();
     }
 
-    // --- Discord Avatar Interaction ---
+    // === Discord Avatar Speech Bubble ===
     showCatSpeech(e) {
         const sounds = ["Meow!", "Purrr...", "Nya~", "*hiss*", "Prrrrt", "Mrow?"];
         const message = sounds[Math.floor(Math.random() * sounds.length)];
-    
-        const bubble = document.createElement('div');
-        bubble.className = 'copy-bubble cat-bubble'; // Reuse same bubble class
-        bubble.textContent = message;
-        document.body.appendChild(bubble);
-    
-        const avatarRect = e.target.getBoundingClientRect();
-        const scrollY = window.scrollY || window.pageYOffset;
-    
-        bubble.style.left = `${avatarRect.left + avatarRect.width / 2}px`;
-        bubble.style.top = `${avatarRect.top + scrollY - 40}px`; // position above avatar
-    
-        setTimeout(() => bubble.remove(), 2000);
+        this.showSpeechBubble(e.target, message, 'cat-bubble');
     }
 }
 
