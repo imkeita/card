@@ -507,3 +507,75 @@ h1 {
     font-size: 15px;
   }
 }
+
+/* Add to your CSS */
+.speech-bubble {
+  position: absolute;
+  background-color: var(--bg-card);
+  color: var(--text-primary);
+  padding: 8px 12px;
+  border-radius: var(--border-radius);
+  font-size: 14px;
+  font-weight: 600;
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--color-primary);
+  opacity: 0;
+  transform: translate(-50%, -10px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  pointer-events: none;
+  z-index: 100;
+  max-width: 120px;
+  text-align: center;
+  margin-bottom: 10px;
+  box-shadow: 0 0 10px rgba(255, 102, 178, 0.3);
+}
+
+.speech-bubble::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 10px 8px 0;
+  border-style: solid;
+  border-color: var(--bg-card) transparent transparent;
+  filter: drop-shadow(0 0 10px rgba(255, 102, 178, 0.3));
+}
+
+.speech-bubble.visible {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+/* Add this to make the avatar container position-relative */
+.discord-user {
+  position: relative;
+}
+
+.copy-bubble {
+  position: absolute;
+  transform: translateX(-50%);
+  background: #333;
+  color: #fff;
+  padding: 4px 8px;
+  border-radius: 8px;
+  font-size: 12px;
+  white-space: nowrap;
+  z-index: 999;
+  opacity: 0;
+  animation: fadeInOut 2s ease;
+  pointer-events: none;
+}
+
+.copy-bubble.cat-bubble {
+    background: #292941;
+    color: #ffccff;
+    font-family: "Comic Sans MS", cursive, sans-serif;
+}
+
+@keyframes fadeInOut {
+  0% { opacity: 0; transform: translateX(-50%) translateY(10px); }
+  10% { opacity: 1; transform: translateX(-50%) translateY(0); }
+  90% { opacity: 1; transform: translateX(-50%) translateY(0); }
+  100% { opacity: 0; transform: translateX(-50%) translateY(-10px); }
+}
