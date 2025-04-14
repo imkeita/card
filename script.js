@@ -17,6 +17,7 @@ class LinkTreeApp {
         this.copyButtons = document.querySelectorAll('.copy-btn');
         this.dropdownTriggers = document.querySelectorAll('[data-dropdown]');
         this.dropdowns = document.querySelectorAll('.dropdown-content');
+        this.statusIndicators = document.querySelectorAll('.status-indicator');
     }
 
     addEventListeners() {
@@ -27,6 +28,11 @@ class LinkTreeApp {
         this.copyButtons.forEach(btn =>
             btn.addEventListener('click', this.handleCopyClick.bind(this))
         );
+
+        this.statusIndicators.forEach(indicator => {
+            indicator.addEventListener('mouseenter', this.handleStatusHover.bind(this));
+            indicator.addEventListener('mouseleave', this.removeStatusBubble.bind(this));
+        });
 
         document.addEventListener('click', this.handleDocumentClick.bind(this));
         document.addEventListener('keydown', this.handleKeyEvents.bind(this));
@@ -53,28 +59,27 @@ class LinkTreeApp {
             .catch(err => {
                 this.showIconSwap(button.querySelector('i'), 'fas fa-xmark');
                 this.showSpeechBubble(button.querySelector('i'), 'Copy failed!');
-                // this.showToast('Copy failed!', 'error');
                 console.error('Copy failed:', err);
             });
     }
 
     showIconSwap(icon, tempClass) {
         if (!icon) return;
-    
+
         const existingTimeout = icon.dataset.iconTimeout;
         if (existingTimeout) {
             clearTimeout(Number(existingTimeout));
             delete icon.dataset.iconTimeout;
         }
-    
+
         const originalClass = 'fas fa-copy';
         icon.className = tempClass;
-    
+
         const timeout = setTimeout(() => {
             icon.className = originalClass;
             delete icon.dataset.iconTimeout;
         }, 2000);
-    
+
         icon.dataset.iconTimeout = timeout;
     }
 
@@ -126,7 +131,7 @@ class LinkTreeApp {
         if (!target) return;
 
         const bubble = document.createElement('div');
-        bubble.className = `copy-bubble ${variant}`.trim();
+        bubble.className = `speech-bubble ${variant}`.trim();
         bubble.textContent = message;
         document.body.appendChild(bubble);
 
@@ -137,6 +142,31 @@ class LinkTreeApp {
         bubble.style.top = `${rect.top + scrollY - 40}px`;
 
         setTimeout(() => bubble.remove(), 2000);
+    }
+
+    showTooltip(target, message, variant = '') {
+        if (!target) return;
+
+        const bubble = document.createElement('div');
+        bubble.className = `speech-bubble tooltip ${variant}`.trim();
+        bubble.textContent = message;
+        document.body.appendChild(bubble);
+
+        const rect = target.getBoundingClientRect();
+        const scrollY = window.scrollY || window.pageYOffset;
+
+        bubble.style.left = `${rect.left + rect.width / 2}px`;
+        bubble.style.top = `${rect.top + scrollY - 40}px`;
+
+        target._tooltipRef = bubble;
+    }
+
+    hideTooltip(target) {
+        const bubble = target?._tooltipRef;
+        if (bubble) {
+            bubble.remove();
+            delete target._tooltipRef;
+        }
     }
 
     // === Dropdown Handling ===
@@ -244,6 +274,26 @@ class LinkTreeApp {
 
     handleKeyEvents(e) {
         if (e.key === 'Escape') this.closeAllDropdowns();
+    }
+
+    /// ===
+    handleStatusHover(e) {
+        const statusMap = {
+            'online': 'Online',
+            'idle': 'Idle',
+            'dnd': 'Do Not Disturb',
+            'offline': 'Offline'
+        };
+
+        const el = e.currentTarget;
+        const statusClass = [...el.classList].find(cls => statusMap[cls]);
+        const status = statusMap[statusClass] || 'Unknown';
+
+        this.showTooltip(e.currentTarget, status)
+    }
+
+    removeStatusBubble(e) {
+        this.hideTooltip(e.currentTarget)
     }
 }
 

@@ -586,43 +586,6 @@ h1 {
 /* ================================= */
 .speech-bubble {
   position: absolute;
-  background-color: var(--bg-card);
-  color: var(--text-primary);
-  padding: 8px 12px;
-  border-radius: var(--border-radius);
-  font-size: 14px;
-  font-weight: 600;
-  border: 1px solid var(--color-primary);
-  opacity: 0;
-  transform: translate(-50%, -10px);
-  transition: opacity 0.3s ease, transform 0.3s ease;
-  pointer-events: none;
-  z-index: 100;
-  max-width: 120px;
-  text-align: center;
-  margin-bottom: 10px;
-  box-shadow: 0 0 10px rgba(255, 102, 178, 0.3);
-}
-
-.speech-bubble::after {
-  content: '';
-  position: absolute;
-  bottom: -10px;
-  left: 50%;
-  transform: translateX(-50%);
-  border-width: 10px 8px 0;
-  border-style: solid;
-  border-color: var(--bg-card) transparent transparent;
-  filter: drop-shadow(0 0 10px rgba(255, 102, 178, 0.3));
-}
-
-.speech-bubble.visible {
-  opacity: 1;
-  transform: translate(-50%, 0);
-}
-
-.copy-bubble {
-  position: absolute;
   transform: translateX(-50%);
   background: #333;
   color: #fff;
@@ -636,10 +599,14 @@ h1 {
   pointer-events: none;
 }
 
-.copy-bubble.cat-bubble {
-  background: #292941;
-  color: #ffccff;
-  font-family: "Comic Sans MS", cursive, sans-serif;
+.speech-bubble.tooltip {
+  animation: none !important;
+  opacity: 1;
+}
+
+.speech-bubble.tooltip.hide {
+  opacity: 0;
+  transition: opacity 0.2s ease;
 }
 
 /* ================================= */
