@@ -214,6 +214,14 @@ h1 {
   flex-direction: column;
 }
 
+.discord-avatar-wrapper {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  margin-right: 15px;
+  flex-shrink: 0;
+}
+
 .discord-avatar {
   border-radius: 50%;
   flex-shrink: 0;
@@ -222,6 +230,23 @@ h1 {
   object-fit: cover;
   width: 40px;
 }
+
+.status-indicator {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid var(--bg-card);
+  box-shadow: 0 0 0 2px var(--bg-card);
+}
+
+/* Status colors */
+.status-indicator.online { background-color: #43b581; }
+.status-indicator.idle { background-color: #faa61a; }
+.status-indicator.dnd { background-color: #f04747; }
+.status-indicator.offline { background-color: #747f8d; }
 
 .discord-username {
   color: var(--text-secondary);
