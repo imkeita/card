@@ -17,7 +17,6 @@ class LinkTreeApp {
         this.copyButtons = document.querySelectorAll('.copy-btn');
         this.dropdownTriggers = document.querySelectorAll('[data-dropdown]');
         this.dropdowns = document.querySelectorAll('.dropdown-content');
-        
     }
 
     addEventListeners() {
