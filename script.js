@@ -27,9 +27,6 @@ class LinkTreeApp {
         this.statusIndicators.forEach(indicator => {
             indicator.addEventListener('mouseenter', this.showStatusBubble.bind(this));
             indicator.addEventListener('mouseleave', this.removeStatusBubble.bind(this));
-            
-            indicator.addEventListener('focus', this.showStatusBubble.bind(this));
-            indicator.addEventListener('blur', this.removeStatusBubble.bind(this));
         });
         document.addEventListener('click', this.handleDocumentClick.bind(this));
         document.addEventListener('keydown', this.handleKeyEvents.bind(this));
