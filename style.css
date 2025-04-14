@@ -202,19 +202,19 @@ h1 {
   min-width: 0;
 }
 
-.discord-user {
+.profile-card {
   position: relative;
   align-items: center;
   display: flex;
 }
 
-.discord-user .link-text {
+.profile-card .link-text {
   display: flex;
   flex: 1;
   flex-direction: column;
 }
 
-.discord-avatar-wrapper {
+.user-avatar-wrapper {
   position: relative;
   width: 40px;
   height: 40px;
@@ -222,7 +222,7 @@ h1 {
   flex-shrink: 0;
 }
 
-.discord-avatar {
+.user-avatar {
   border-radius: 50%;
   flex-shrink: 0;
   height: 40px;
@@ -248,20 +248,34 @@ h1 {
 .status-indicator.dnd { background-color: #f04747; }
 .status-indicator.offline { background-color: #747f8d; }
 
-.discord-username {
+.user-name {
   color: var(--text-secondary);
   font-size: 12px;
   margin-right: 10px;
   user-select: all;
 }
 
-.discord-user i {
+.profile-card .copy-icon {
   position: absolute;
   right: 15px;
   top: 50%;
   transform: translateY(-50%);
   color: var(--text-secondary);
   transition: var(--transition-fast);
+}
+
+/* ================================= */
+/* ========== TELEGRAM ============= */
+/* ================================= */
+.telegram-split {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.telegram-split  .link-card {
+  flex: 1 1 48%;
+  min-width: 0;
 }
 
 /* ================================= */
@@ -588,7 +602,7 @@ h1 {
   position: absolute;
   transform: translateX(-50%);
   background: #333;
-  color: #fff;
+  color: var(--text-primary);
   padding: 4px 8px;
   border-radius: 8px;
   font-size: 12px;
@@ -599,12 +613,12 @@ h1 {
   pointer-events: none;
 }
 
-.speech-bubble.tooltip {
+.speech-bubble.persistent {
   animation: none !important;
   opacity: 1;
 }
 
-.speech-bubble.tooltip.hide {
+.speech-bubble.persistent.hide {
   opacity: 0;
   transition: opacity 0.2s ease;
 }
@@ -652,6 +666,10 @@ h1 {
   }
 
   .discord-split .link-card {
+    flex: 1 1 100%;
+  }
+
+  .telegram-split .link-card {
     flex: 1 1 100%;
   }
 }

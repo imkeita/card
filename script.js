@@ -1,17 +1,17 @@
 class LinkTreeApp {
     constructor() {
         this.dropdowns = [];
+        this.iconTimeouts = new WeakMap();
         this.init();
     }
 
-    // === Initialization ===
     init() {
         this.cacheElements();
         this.createToastContainer();
-        this.createModal();
         this.addEventListeners();
     }
 
+    // === Cache DOM Elements ===
     cacheElements() {
         this.linkButtons = document.querySelectorAll('.link-button');
         this.copyButtons = document.querySelectorAll('.copy-btn');
@@ -20,20 +20,14 @@ class LinkTreeApp {
         this.statusIndicators = document.querySelectorAll('.status-indicator');
     }
 
+    // === Event Listeners ===
     addEventListeners() {
-        this.linkButtons.forEach(btn =>
-            btn.addEventListener('click', this.handleLinkClick.bind(this))
-        );
-
-        this.copyButtons.forEach(btn =>
-            btn.addEventListener('click', this.handleCopyClick.bind(this))
-        );
-
+        this.linkButtons.forEach(btn => btn.addEventListener('click', this.handleLinkClick.bind(this)));
+        this.copyButtons.forEach(btn => btn.addEventListener('click', this.handleCopyClick.bind(this)));
         this.statusIndicators.forEach(indicator => {
-            indicator.addEventListener('mouseenter', this.handleStatusHover.bind(this));
+            indicator.addEventListener('mouseenter', this.showStatusBubble.bind(this));
             indicator.addEventListener('mouseleave', this.removeStatusBubble.bind(this));
         });
-
         document.addEventListener('click', this.handleDocumentClick.bind(this));
         document.addEventListener('keydown', this.handleKeyEvents.bind(this));
     }
@@ -44,43 +38,87 @@ class LinkTreeApp {
         if (link) window.open(link, '_blank', 'noopener,noreferrer');
     }
 
-    // === Copy to Clipboard ===
+    // === Clipboard Copy ===
     handleCopyClick(e) {
         const button = e.currentTarget;
         const targetSelector = button.getAttribute('data-copy');
         const target = document.querySelector(targetSelector);
-        if (!target) return;
-
+        const copyIcon = button.querySelector('.copy-icon');
+    
+        if (!target || !copyIcon) return;
+    
         navigator.clipboard.writeText(target.textContent)
             .then(() => {
-                this.showIconSwap(button.querySelector('i'), 'fas fa-check');
-                this.showSpeechBubble(button.querySelector('i'), 'Copied!');
+                this.showIconSwap(copyIcon, 'copy-icon fas fa-check');
+                this.showBubble(copyIcon, 'Copied!');
             })
             .catch(err => {
-                this.showIconSwap(button.querySelector('i'), 'fas fa-xmark');
-                this.showSpeechBubble(button.querySelector('i'), 'Copy failed!');
+                this.showIconSwap(copyIcon, 'copy-icon fas fa-xmark');
+                this.showBubble(copyIcon, 'Copy failed!');
                 console.error('Copy failed:', err);
             });
     }
-
+    
     showIconSwap(icon, tempClass) {
         if (!icon) return;
 
-        const existingTimeout = icon.dataset.iconTimeout;
-        if (existingTimeout) {
-            clearTimeout(Number(existingTimeout));
-            delete icon.dataset.iconTimeout;
-        }
-
-        const originalClass = 'fas fa-copy';
+        clearTimeout(this.iconTimeouts.get(icon));
         icon.className = tempClass;
 
-        const timeout = setTimeout(() => {
-            icon.className = originalClass;
-            delete icon.dataset.iconTimeout;
-        }, 2000);
+        const timeout = setTimeout(() => icon.className = 'copy-icon fas fa-copy', 2000);
+        this.iconTimeouts.set(icon, timeout);
+    }
 
-        icon.dataset.iconTimeout = timeout;
+    // === Bubble / Tooltip ===
+    showBubble(target, message, { variant = '', persistent = false } = {}) {
+        if (!target) return;
+    
+        const bubble = document.createElement('div');
+        bubble.className = `speech-bubble ${variant}`.trim();
+        if (persistent) bubble.classList.add('persistent');
+    
+        bubble.textContent = message;
+        document.body.appendChild(bubble);
+    
+        const rect = target.getBoundingClientRect();
+        const scrollY = window.scrollY || window.pageYOffset;
+    
+        bubble.style.left = `${rect.left + rect.width / 2}px`;
+        bubble.style.top = `${rect.top + scrollY - 40}px`;
+    
+        if (!persistent) {
+            setTimeout(() => bubble.remove(), 2000);
+        } else {
+            target._tooltipRef = bubble;
+        }
+    }
+    
+    hideBubble(target) {
+        const bubble = target?._tooltipRef;
+        if (bubble) {
+            bubble.classList.add('hide');
+            setTimeout(() => bubble.remove(), 200);
+            delete target._tooltipRef;
+        }
+    }
+
+    showStatusBubble(e) {
+        const statusMap = {
+            'online': 'Online',
+            'idle': 'Idle',
+            'dnd': 'Do Not Disturb',
+            'offline': 'Offline'
+        };
+
+        const el = e.currentTarget;
+        const statusClass = [...el.classList].find(cls => statusMap[cls]);
+        const status = statusMap[statusClass] || 'Unknown';
+
+        this.showBubble(el, status, { persistent: true });
+    }
+
+    removeStatusBubble(e) {
+        this.hideBubble(e.currentTarget);
     }
 
     // === Toasts ===
@@ -101,75 +139,7 @@ class LinkTreeApp {
         setTimeout(() => toast.remove(), 3500);
     }
 
-    // === Modal ===
-    createModal() {
-        this.modalOverlay = document.createElement('div');
-        this.modalOverlay.className = 'modal-overlay';
-        this.modalOverlay.innerHTML = `
-            <div class="modal">
-                <h2 class="modal-title"></h2>
-                <p class="modal-message"></p>
-                <button class="modal-close">OK</button>
-            </div>
-        `;
-        document.body.appendChild(this.modalOverlay);
-
-        this.modalOverlay.querySelector('.modal-close').addEventListener('click', () => {
-            this.modalOverlay.classList.remove('show');
-        });
-    }
-
-    showModal(title, message) {
-        const modal = this.modalOverlay;
-        modal.querySelector('.modal-title').textContent = title;
-        modal.querySelector('.modal-message').textContent = message;
-        modal.classList.add('show');
-    }
-
-    // === Speech Bubble ===
-    showSpeechBubble(target, message, variant = '') {
-        if (!target) return;
-
-        const bubble = document.createElement('div');
-        bubble.className = `speech-bubble ${variant}`.trim();
-        bubble.textContent = message;
-        document.body.appendChild(bubble);
-
-        const rect = target.getBoundingClientRect();
-        const scrollY = window.scrollY || window.pageYOffset;
-
-        bubble.style.left = `${rect.left + rect.width / 2}px`;
-        bubble.style.top = `${rect.top + scrollY - 40}px`;
-
-        setTimeout(() => bubble.remove(), 2000);
-    }
-
-    showTooltip(target, message, variant = '') {
-        if (!target) return;
-
-        const bubble = document.createElement('div');
-        bubble.className = `speech-bubble tooltip ${variant}`.trim();
-        bubble.textContent = message;
-        document.body.appendChild(bubble);
-
-        const rect = target.getBoundingClientRect();
-        const scrollY = window.scrollY || window.pageYOffset;
-
-        bubble.style.left = `${rect.left + rect.width / 2}px`;
-        bubble.style.top = `${rect.top + scrollY - 40}px`;
-
-        target._tooltipRef = bubble;
-    }
-
-    hideTooltip(target) {
-        const bubble = target?._tooltipRef;
-        if (bubble) {
-            bubble.remove();
-            delete target._tooltipRef;
-        }
-    }
-
-    // === Dropdown Handling ===
+    // === Dropdown ===
     handleDocumentClick(e) {
         const trigger = e.target.closest('[data-dropdown]');
         const actionButton = e.target.closest('[data-action]');
@@ -274,26 +244,6 @@ class LinkTreeApp {
 
     handleKeyEvents(e) {
         if (e.key === 'Escape') this.closeAllDropdowns();
-    }
-
-    /// ===
-    handleStatusHover(e) {
-        const statusMap = {
-            'online': 'Online',
-            'idle': 'Idle',
-            'dnd': 'Do Not Disturb',
-            'offline': 'Offline'
-        };
-
-        const el = e.currentTarget;
-        const statusClass = [...el.classList].find(cls => statusMap[cls]);
-        const status = statusMap[statusClass] || 'Unknown';
-
-        this.showTooltip(e.currentTarget, status)
-    }
-
-    removeStatusBubble(e) {
-        this.hideTooltip(e.currentTarget)
     }
 }
 
