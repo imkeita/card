@@ -17,7 +17,7 @@ class LinkTreeApp {
         this.copyButtons = document.querySelectorAll('.copy-btn');
         this.dropdownTriggers = document.querySelectorAll('[data-dropdown]');
         this.dropdowns = document.querySelectorAll('.dropdown-content');
-        this.discordAvatar = document.querySelector('.discord-avatar');
+        
     }
 
     addEventListeners() {
@@ -31,8 +31,6 @@ class LinkTreeApp {
 
         document.addEventListener('click', this.handleDocumentClick.bind(this));
         document.addEventListener('keydown', this.handleKeyEvents.bind(this));
-
-        this.discordAvatar?.addEventListener('mouseenter', this.showCatSpeech.bind(this));
     }
 
     // === Link Handling ===
@@ -247,13 +245,6 @@ class LinkTreeApp {
 
     handleKeyEvents(e) {
         if (e.key === 'Escape') this.closeAllDropdowns();
-    }
-
-    // === Discord Avatar Speech Bubble ===
-    showCatSpeech(e) {
-        const sounds = ["Meow!", "Purrr...", "Nya~", "*hiss*", "Prrrrt", "Mrow?"];
-        const message = sounds[Math.floor(Math.random() * sounds.length)];
-        this.showSpeechBubble(e.target, message, 'cat-bubble');
     }
 }
 
