@@ -189,18 +189,22 @@ h1 {
 }
 
 /* ================================= */
-/* ========== DISCORD ============== */
+/* ========== SPLIT GRID =========== */
 /* ================================= */
-.discord-split {
+.split-grid {
   display: flex;
   flex-wrap: wrap;
   gap: 15px;
 }
 
-.discord-split .link-card {
+.split-grid .link-card {
   flex: 1 1 48%;
   min-width: 0;
 }
+
+/* ================================= */
+/* ========= PROFILE CARD ========== */
+/* ================================= */
 
 .profile-card {
   position: relative;
@@ -262,20 +266,6 @@ h1 {
   transform: translateY(-50%);
   color: var(--text-secondary);
   transition: var(--transition-fast);
-}
-
-/* ================================= */
-/* ========== TELEGRAM ============= */
-/* ================================= */
-.telegram-split {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 15px;
-}
-
-.telegram-split  .link-card {
-  flex: 1 1 48%;
-  min-width: 0;
 }
 
 /* ================================= */
@@ -347,6 +337,28 @@ h1 {
   margin-left: auto;
   transition: var(--transition-slow);
 }
+
+/* ================================= */
+/* ================================= */
+/* ================================= */
+.footer {
+  margin-top: 40px;
+  padding: 20px;
+  text-align: center;
+  font-size: 14px;
+  color: var(--text-secondary);
+  border-top: 1px solid var(--border-color);
+}
+
+.footer a {
+  color: var(--color-primary);
+  text-decoration: none;
+}
+
+.footer a:hover {
+  text-decoration: underline;
+}
+
 
 /* ================================= */
 /* ========== CAPTCHA + EMAIL ====== */
@@ -665,11 +677,7 @@ h1 {
     padding: 12px;
   }
 
-  .discord-split .link-card {
-    flex: 1 1 100%;
-  }
-
-  .telegram-split .link-card {
+  .split-grid .link-card {
     flex: 1 1 100%;
   }
 }
