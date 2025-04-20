@@ -2,6 +2,8 @@
 
 A custom, responsive social profile page featuring styled link cards, dropdowns, copy-to-clipboard actions, and more.
 
+![Screenshot](images/screenshot.png)
+
 ## 🔗 Features
 
 - Responsive layout for all devices
