@@ -14,13 +14,15 @@
     <div class="container">
         <header class="profile">
             <img src="images/avatar.png" alt="Keita's avatar" class="avatar" width="150" height="150" loading="lazy">
-            <h1>User Name</h1>
-            <p class="subtitle">Some description</p>
+            <div class="profile-content">
+                <h1>User Name</h1>
+                <p class="subtitle">Some description</p>
+            </div>
         </header>
         
         <main class="links" aria-label="Social links">
             <!-- Social Links -->
-            <button class="link-card link-card-half link-card-half link-button" data-link="https://twitch.tv/example">
+            <button class="link-card link-card-half link-button" data-link="https://twitch.tv/example">
                 <div class="link-icon" aria-hidden="true">
                     <i class="fab fa-twitch"></i>
                 </div>
@@ -30,7 +32,7 @@
                 </div>
             </button>
 
-            <button class="link-card link-card-half link-button" data-link="https://youtube.com/example">
+            <button class="link-card link-button" data-link="https://youtube.com/example">
                 <div class="link-icon" aria-hidden="true">
                     <i class="fab fa-youtube"></i></div>
                 <div class="link-text">
@@ -61,7 +63,7 @@
                 </button>
 
                 <button class="link-card profile-card copy-btn" data-copy="#discordUsername" aria-label="Copy username">
-                    <div class="user-avatar-wrapper">
+                    <div class="profile-avatar">
                         <img src="images/avatar.png" alt="Discord Avatar" class="user-avatar" loading="lazy">
                         <div class="status-indicator online" aria-label="Online"></div>
                     </div>
@@ -136,40 +138,6 @@
                     </a>
                 </div>
             </div>
-
-            <!-- Email Section -->
-            <!-- <div class="dropdown-container">
-                <button class="link-card" data-dropdown="emailDropdown" aria-expanded="false" aria-controls="emailDropdown" aria-haspopup="true">
-                    <div class="link-icon" aria-hidden="true">
-                        <i class="fas fa-envelope"></i>
-                    </div>
-                    <div class="link-text">
-                        <div class="link-title">Business Email</div>
-                        <div class="link-desc">Click to reveal</div>
-                    </div>
-                    <i class="fas fa-chevron-down dropdown-arrow" aria-hidden="true"></i>
-                </button>
-                
-                <div id="emailDropdown" class="dropdown-content" role="menu">
-                    <div class="captcha-container">
-                        <p>Please verify you're human:</p>
-                        <div class="captcha-challenge">
-                            <span id="captchaText" aria-live="polite"></span>
-                            <button id="refreshCaptcha" aria-label="Refresh CAPTCHA">
-                                <i class="fas fa-sync-alt"></i>
-                            </button>
-                        </div>
-                        <input type="text" id="captchaInput" placeholder="Enter the text above" aria-label="CAPTCHA input">
-                        <button id="verifyCaptcha" class="verify-button">Verify</button>
-                    </div>
-                    <div id="emailResult" class="email-result" aria-live="polite">
-                        <p>Email: <span id="businessEmail"></span></p>
-                        <button class="copy-btn" data-copy="#businessEmail" aria-label="Copy email">
-                            <i class="fas fa-copy"></i> Copy
-                        </button>
-                    </div>
-                </div>
-            </div> -->
             
             <!-- Warning Dropdown -->
             <!-- <div class="dropdown-container">
@@ -197,14 +165,12 @@
             </div> -->
         </nav>
         <footer class="footer">
+            <p>© 2025 Keita. All rights reserved.</p>
             <p>
-                &copy; 2025 Keita. Icons by FontAwesome.
+                <a href="https://github.com/imkeita/card" target="_blank" rel="noopener noreferrer">Source Code</a>
+                • Licensed under <a href="LICENSE" target="_blank">CC BY-NC 4.0</a>
             </p>
-            <p>
-                Content licensed under <a href="LICENSE" target="_blank">CC BY-NC 4.0</a>.
-            </p>
-        </footer>
-        
+        </footer>   
     </div>
     
     <script src="script.js"></script>
