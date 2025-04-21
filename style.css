@@ -272,7 +272,6 @@ h1 {
   color: var(--text-secondary);
   border-top: 1px solid var(--border-color);
   margin-top: 40px;
-  animation: fadeIn 0.8s ease-in-out;
 }
 
 .footer a {
@@ -333,6 +332,9 @@ h1 {
   opacity: 1;
   transform: translateY(0);
 }
+ 
+.dropdown-content.show a:nth-child(1) { transition-delay: 0.1s; }
+.dropdown-content.show a:nth-child(2) { transition-delay: 0.2s; }
 
 .dropdown-content a:hover,
 .dropdown-content a:focus {

@@ -1,6 +1,8 @@
 class LinkTreeApp {
     constructor() {
+        this.middleMouseDownBtn = null;
         this.dropdowns = [];
+        this.tooltip = null;
         this.iconTimeouts = new WeakMap();
         this.init();
     }
@@ -8,27 +10,52 @@ class LinkTreeApp {
     init() {
         this.cacheElements();
         this.createToastContainer();
+        this.createTooltip();
         this.addEventListeners();
     }
 
     // === Cache DOM Elements ===
     cacheElements() {
-        this.linkButtons = document.querySelectorAll('.link-button');
-        this.copyButtons = document.querySelectorAll('.copy-btn');
-        this.dropdownTriggers = document.querySelectorAll('[data-dropdown]');
+        this.container = document.body;
         this.dropdowns = document.querySelectorAll('.dropdown-content');
         this.statusIndicators = document.querySelectorAll('.status-indicator');
     }
 
     // === Event Listeners ===
-    addEventListeners() {
-        this.linkButtons.forEach(btn => btn.addEventListener('click', this.handleLinkClick.bind(this)));
-        this.copyButtons.forEach(btn => btn.addEventListener('click', this.handleCopyClick.bind(this)));
+    addEventListeners() {    
+        this.container?.addEventListener('click', (e) => {
+            const linkBtn = e.target.closest('.link-button');
+            const copyBtn = e.target.closest('.copy-btn');
+            const dropdownTrigger = e.target.closest('[data-dropdown]');
+            const actionButton = e.target.closest('[data-action]');
+            const insideDropdown = e.target.closest('.dropdown-container');
+
+            if (linkBtn) {
+                this.handleLinkClick({ currentTarget: linkBtn, ...e });
+            }
+
+            if (copyBtn) {
+                this.handleCopyClick({ currentTarget: copyBtn, ...e });
+            }
+
+            if (dropdownTrigger) {
+                e.preventDefault();
+                this.toggleDropdown(dropdownTrigger.getAttribute('data-dropdown'), dropdownTrigger);
+            } else if (actionButton) {
+                this.handleActionButton(actionButton);
+            } else if (!insideDropdown) {
+                this.closeAllDropdowns();
+            }
+        });
+    
+        this.container?.addEventListener('mousedown', this.handleMiddleClick.bind(this));
+        this.container?.addEventListener('mouseup', this.handleMiddleClick.bind(this));
+
         this.statusIndicators.forEach(indicator => {
             indicator.addEventListener('mouseenter', this.showStatusBubble.bind(this));
             indicator.addEventListener('mouseleave', this.removeStatusBubble.bind(this));
         });
-        document.addEventListener('click', this.handleDocumentClick.bind(this));
+
         document.addEventListener('keydown', this.handleKeyEvents.bind(this));
     }
 
@@ -36,6 +63,22 @@ class LinkTreeApp {
     handleLinkClick(e) {
         const link = e.currentTarget.getAttribute('data-link');
         if (link) window.open(link, '_blank', 'noopener,noreferrer');
+    }
+
+    handleMiddleClick(e) {
+        const linkBtn = e.target.closest('.link-button');
+        if (!linkBtn) return;
+    
+        if (e.type === 'mousedown' && e.button === 1) {
+            this.middleMouseDown = linkBtn;
+            e.preventDefault();
+        }
+    
+        if (e.type === 'mouseup' && e.button === 1 && this.middleMouseDown === linkBtn) {
+            this.middleMouseDown = null;
+            const link = linkBtn.getAttribute('data-link');
+            if (link) window.open(link, '_blank', 'noopener,noreferrer');
+        }
     }
 
     // === Clipboard Copy ===
@@ -46,7 +89,12 @@ class LinkTreeApp {
         const copyIcon = button.querySelector('.copy-icon');
     
         if (!target || !copyIcon) return;
-    
+        
+        if (!navigator.clipboard) {
+            this.showBubble(copyIcon, 'Clipboard unsupported!');
+            return;
+        }
+        
         navigator.clipboard.writeText(target.textContent)
             .then(() => {
                 this.showIconSwap(copyIcon, 'copy-icon fas fa-check');
@@ -70,34 +118,47 @@ class LinkTreeApp {
     }
 
     // === Bubble / Tooltip ===
+    createTooltip() {
+        this.tooltip = document.createElement('div');
+        this.tooltip.className = 'speech-bubble';
+        this.tooltip.style.position = 'absolute';
+        this.tooltip.style.pointerEvents = 'none';
+        this.tooltip.style.display = 'none';
+        document.body.appendChild(this.tooltip);
+    }
+    
     showBubble(target, message, { variant = '', persistent = false } = {}) {
-        if (!target) return;
+        if (!target || !this.tooltip) return;
     
-        const bubble = document.createElement('div');
-        bubble.className = `speech-bubble ${variant}`.trim();
-        if (persistent) bubble.classList.add('persistent');
-    
-        bubble.textContent = message;
-        document.body.appendChild(bubble);
+        this.tooltip.textContent = message;
+        this.tooltip.className = `speech-bubble ${variant}`.trim();
+        if (persistent) this.tooltip.classList.add('persistent');
+        this.tooltip.style.display = 'block';
     
         const rect = target.getBoundingClientRect();
         const scrollY = window.scrollY || window.pageYOffset;
     
-        bubble.style.left = `${rect.left + rect.width / 2}px`;
-        bubble.style.top = `${rect.top + scrollY - 40}px`;
+        this.tooltip.style.left = `${rect.left + rect.width / 2}px`;
+        this.tooltip.style.top = `${rect.top + scrollY - 40}px`;
     
         if (!persistent) {
-            setTimeout(() => bubble.remove(), 2000);
+            clearTimeout(this.tooltip._hideTimeout);
+            this.tooltip._hideTimeout = setTimeout(() => this.hideBubble(), 2000);
         } else {
-            target._tooltipRef = bubble;
+            target._tooltipRef = true;
         }
     }
     
-    hideBubble(target) {
-        const bubble = target?._tooltipRef;
-        if (bubble) {
-            bubble.classList.add('hide');
-            setTimeout(() => bubble.remove(), 200);
+    hideBubble(target = null) {
+        if (!this.tooltip) return;
+    
+        this.tooltip.classList.add('hide');
+        setTimeout(() => {
+            this.tooltip.style.display = 'none';
+            this.tooltip.classList.remove('hide');
+        }, 200);
+    
+        if (target && target._tooltipRef) {
             delete target._tooltipRef;
         }
     }
@@ -140,21 +201,6 @@ class LinkTreeApp {
     }
 
     // === Dropdown ===
-    handleDocumentClick(e) {
-        const trigger = e.target.closest('[data-dropdown]');
-        const actionButton = e.target.closest('[data-action]');
-        const clickedInsideDropdown = e.target.closest('.dropdown-container');
-
-        if (trigger) {
-            e.preventDefault();
-            this.toggleDropdown(trigger.getAttribute('data-dropdown'), trigger);
-        } else if (actionButton) {
-            this.handleActionButton(actionButton);
-        } else if (!clickedInsideDropdown) {
-            this.closeAllDropdowns();
-        }
-    }
-
     handleActionButton(button) {
         const action = button.getAttribute('data-action');
         const dropdownId = button.getAttribute('data-dropdown');
@@ -197,14 +243,9 @@ class LinkTreeApp {
         const trigger = document.querySelector(`[data-dropdown="${dropdownId}"]`);
         const dropdown = document.getElementById(dropdownId);
         const chevron = dropdown?.closest('.dropdown-container')?.querySelector('.dropdown-arrow');
-
+    
         trigger?.setAttribute('aria-expanded', 'false');
         if (chevron) chevron.style.transform = 'rotate(0deg)';
-
-        dropdown?.querySelectorAll('a, button').forEach(item => {
-            item.style.opacity = '0';
-            item.style.transform = 'translateY(-10px)';
-        });
     }
 
     updateDropdownAccessibility(trigger, isExpanded) {
@@ -214,23 +255,10 @@ class LinkTreeApp {
     animateDropdown(dropdown, isOpening) {
         const chevron = dropdown.closest('.dropdown-container')?.querySelector('.dropdown-arrow');
         if (chevron) chevron.style.transform = isOpening ? 'rotate(180deg)' : 'rotate(0deg)';
-
+    
         if (isOpening) {
-            this.animateDropdownItems(dropdown);
             this.ensureDropdownVisibility(dropdown);
         }
-    }
-
-    animateDropdownItems(dropdown) {
-        const items = dropdown.querySelectorAll('a, button');
-        items.forEach((item, index) => {
-            item.style.opacity = '0';
-            item.style.transform = 'translateY(-10px)';
-            setTimeout(() => {
-                item.style.opacity = '1';
-                item.style.transform = 'translateY(0)';
-            }, 100 * (index + 1));
-        });
     }
 
     ensureDropdownVisibility(dropdown) {
